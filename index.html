@@ -155,33 +155,18 @@
     white-space: nowrap;
   }
 
-  /* ✅ RWD for 小螢幕（手機 <768px） */
-  @media (max-width: 768px) {
-    .top-row {
-      grid-template-columns: 1fr 1fr;   /* 上半部 → 2欄 */
-      grid-auto-rows: auto;
+  /* ✅ RWD 手機版排版 */
+  @media (max-width: 900px) {
+    .top-row, .bottom-row {
+      height: auto; /* 取消固定高度 */
+      grid-template-columns: repeat(2, 1fr); /* 改為 2 欄 */
+      grid-template-rows: auto;
     }
     .bottom-row {
-      grid-template-columns: 1fr;       /* 下半部 → 單欄 */
-      grid-template-areas: none;        /* 不用固定 areas */
-      grid-auto-rows: auto;
+      grid-template-areas: unset; /* 取消複雜區塊配置 */
     }
     .panel {
-      min-height: 220px;                /* 每格高度固定一下，避免太扁 */
-    }
-    .panel .content iframe,
-    .panel .content img {
-      object-fit: contain;              /* 圖片在小螢幕保持完整 */
-    }
-  }
-
-  /* ✅ 更小螢幕 (手機 <480px) → 單欄排版 */
-  @media (max-width: 480px) {
-    .top-row {
-      grid-template-columns: 1fr;       /* 1欄直排 */
-    }
-    .panel {
-      min-height: 200px;
+      min-height: 200px; /* 每個區塊至少有高度 */
     }
   }
 </style>
