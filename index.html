@@ -7,7 +7,7 @@
 <title>即時氣象看板</title>
 <style>
   :root{
-    --bandH: 380px; /* ⬅️ 上半部、下半部等高控制 */
+    --bandH: 380px; /* 上半部、下半部等高控制 */
   }
   body {
     margin: 0;
@@ -59,10 +59,9 @@
     background: #20253a;
     color: #ffd166;
     border-bottom: 1px solid #1f2435;
-    /* ✅ 為了讓右上角按鈕靠右： */
     display: flex; justify-content: space-between; align-items: center;
   }
-  .edit-btn { /* ✅ 新增：小型編輯按鈕 */
+  .edit-btn {
     background: #ffd166;
     color: #20253a;
     border: none;
@@ -84,7 +83,7 @@
   .panel .content iframe {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: cover; /* ✅ 保留你原始設定 */
   }
 
   /* scale 調整 */
@@ -127,7 +126,7 @@
     border: 2px solid #1f2435;
     border-radius: 6px;
     padding: 6px 10px;
-    overflow: hidden; /* 保證文字滾動在框內 */
+    overflow: hidden;
   }
   .ticker .warn {
     background: #ff6b6b;
@@ -154,6 +153,21 @@
   .ticker .clock {
     margin-left: auto;
     white-space: nowrap;
+  }
+
+  /* ✅ RWD 手機版排版 */
+  @media (max-width: 900px) {
+    .top-row, .bottom-row {
+      height: auto; /* 取消固定高度 */
+      grid-template-columns: repeat(2, 1fr); /* 改為 2 欄 */
+      grid-template-rows: auto;
+    }
+    .bottom-row {
+      grid-template-areas: unset; /* 取消複雜區塊配置 */
+    }
+    .panel {
+      min-height: 200px; /* 每個區塊至少有高度 */
+    }
   }
 </style>
 </head>
@@ -208,7 +222,6 @@
     <section class="panel lightning"><h3>即時閃電</h3><div class="content zoom small"><img src="https://www.cwa.gov.tw/Data/lightning/lightning_s.jpg"></div></section>
     <section class="panel forecast"><h3>短期天氣預報</h3><div class="content"><iframe width="100%" height="100%" src="https://embed.windy.com/embed.html?type=map&location=coordinates&metricRain=mm&metricTemp=%C2%B0C&metricWind=kt&zoom=6&overlay=rain&product=ecmwf&level=surface&lat=23.554&lon=120.942&pressure=true&play=1" frameborder="0"></iframe></div></section>
 
-    <!-- ✅ 天氣概況：加入手動更新按鈕 + localStorage -->
     <section class="panel weather">
       <h3>
         天氣概況
@@ -224,7 +237,7 @@
     <section class="panel air"><h3>衛星雲圖</h3><div class="content"><img src="https://www.cwa.gov.tw/Data/satellite/TWI_IR1_MB_800/TWI_IR1_MB_800.jpg"></div></section>
   </div>
 
-  <!-- 跑馬燈（✅ 加入手動更新 + localStorage） -->
+  <!-- 跑馬燈 -->
   <div class="ticker">
     <span class="warn">豪雨特報</span>
     <div class="text">
@@ -233,11 +246,9 @@
     <div class="clock" id="clock">--:--:--</div>
     <button class="edit-btn" onclick="editMarquee()" style="margin-left: 10px;">✏️ 手動更新</button>
   </div>
-
 </div>
 
 <script>
-  // 時鐘
   function tick() {
     const el = document.getElementById('clock');
     const now = new Date();
@@ -247,7 +258,6 @@
   tick();
   setInterval(tick, 1000);
 
-  // ✅ 載入 localStorage
   window.addEventListener('DOMContentLoaded', () => {
     const weather = localStorage.getItem('weatherContent');
     const marquee = localStorage.getItem('marqueeText');
@@ -255,7 +265,6 @@
     if (marquee) document.getElementById('marqueeText').textContent = marquee;
   });
 
-  // ✅ 編輯「天氣概況」
   function editWeather() {
     const el = document.getElementById('weatherContent');
     const current = el.textContent;
@@ -267,7 +276,6 @@
     }
   }
 
-  // ✅ 編輯「跑馬燈」
   function editMarquee() {
     const el = document.getElementById('marqueeText');
     const current = el.textContent;
